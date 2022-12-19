@@ -73,14 +73,14 @@ async function run() {
   while (startTime < currentTime + (interval * 1000 * 60 * 60)) {
     currentTime = getTimestamp();
     console.log('currentTime', new Date(currentTime).toISOString().substring(11, 16));
-    await wait()
+    await wait();
   }
 
   stop()
   console.log('stop run');
-  await wait(1000)
+  await wait(1000);
 
-  run()
+  run();
 }
 
-run()
+run();
