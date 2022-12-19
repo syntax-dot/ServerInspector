@@ -59,7 +59,8 @@ function useBatRunner() {
 
   return {
     start,
-    stop
+    stop,
+    getStartTime
   }
 }
 
