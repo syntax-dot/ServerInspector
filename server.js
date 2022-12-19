@@ -12,7 +12,7 @@ async function wait(time = 1000) {
 
 function useBatRunner() {
   let currentBat;
-  const id = (Math.random() * 10).toFixed(0)
+  const id = (Math.random() * 10).toFixed(0);
   console.log('id', id);
 
   const killSignal = 'SIGKILL'
@@ -62,14 +62,15 @@ const { start, stop, getTimestamp } = useBatRunner()
 
 async function run() {
   let currentTime = getTimestamp();
+  const startTime = currentTime
   // const stopTime = currentTime + (interval * 1000 * 60 * 60);
-  const stopTime = currentTime + 20000;
-  console.log('stopTime', new Date(stopTime).toISOString().substring(11, 16));
+  // const stopTime = currentTime + 20000;
+  // console.log('stopTime', new Date(stopTime).toISOString().substring(11, 16));
 
   start()
   console.log('start run');
 
-  while (currentTime < stopTime) {
+  while (startTime < currentTime + (interval * 1000 * 60 * 60)) {
     currentTime = getTimestamp();
     console.log('currentTime', new Date(currentTime).toISOString().substring(11, 16));
     await wait()
@@ -77,7 +78,8 @@ async function run() {
 
   stop()
   console.log('stop run');
-  await wait(100)
+  await wait(1000)
+
   run()
 }
 
