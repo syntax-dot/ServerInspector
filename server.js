@@ -19,9 +19,8 @@ function useBatRunner() {
   const id = (Math.random() * 10).toFixed(0);
 
   function start() {
-    startTime = Date.now()
-
     currentBat = spawn('cmd.exe', ['/c', 'server.ping.bat']);
+    startTime = Date.now()
     console.log('start', id);
 
     currentBat.stdout.on('data', (data) => {
