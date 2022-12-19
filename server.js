@@ -62,8 +62,8 @@ const { start, stop, getTimestamp } = useBatRunner()
 
 async function run() {
   let currentTime = getTimestamp();
-  const stopTime = currentTime + (interval * 1000 * 60 * 60);
-  // const stopTime = currentTime + 10000;
+  // const stopTime = currentTime + (interval * 1000 * 60 * 60);
+  const stopTime = currentTime + 20000;
   console.log('stopTime', new Date(stopTime).toISOString().substring(11, 16));
 
   start()
