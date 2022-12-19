@@ -6,7 +6,7 @@ const decoder = new StringDecoder('utf16le');
 
 const interval = 6; // hours
 // const intervalMs = interval * 1000 * 60 * 60;
-const intervalMs = 10000; // ms
+const intervalMs = 30000; // ms
 
 async function wait(time = 1000) {
   return new Promise(resolve => setTimeout(resolve, time))
@@ -19,7 +19,7 @@ function useBatRunner() {
   const id = (Math.random() * 10).toFixed(0);
 
   function start() {
-    currentBat = spawn('cmd.exe', ['/c', 'server.ping.bat']);
+    currentBat = spawn('cmd.exe', ['/c', '/minecraft_server.1.12.2/start.bat']);
     // TODO try catch
     startTime = Date.now()
     console.log('start', id);
