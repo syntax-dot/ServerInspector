@@ -4,7 +4,7 @@ const { StringDecoder } = require('node:string_decoder');
 const decoder = new StringDecoder('utf16le');
 
 
-const interval = 5 // hours
+const interval = 0.1 // hours
 
 async function wait(time = 1000) {
   return new Promise(resolve => setTimeout(resolve, time))
@@ -15,6 +15,8 @@ function useBatRunner() {
   const id = (Math.random() * 10).toFixed(0)
   console.log('id', id);
 
+  const killSignal = 'SIGKILL'
+
   function getTimestamp() {
     return Date.now()
   }
@@ -24,7 +26,7 @@ function useBatRunner() {
     console.log('start', id);
 
     currentBat.stdout.on('data', (data) => {
-      console.log('stdout', data.toString());
+      // console.log('stdout', data.toString());
     });
 
     currentBat.stderr.on('data', (data) => {
@@ -37,12 +39,16 @@ function useBatRunner() {
   }
 
   function stop() {
-    currentBat.stdin.pause();
-    currentBat.stdout.pause();
-    currentBat.stderr.pause();
-    currentBat.kill();
+    currentBat.stdout.destroy();
+    currentBat.stderr.destroy();
 
-    console.log('stop', id);
+    try {
+      currentBat.kill(killSignal);
+    } catch (e) {
+      console.log('error', e);
+    }
+
+    console.log('kill', id);
   }
 
   return {
@@ -56,21 +62,23 @@ const { start, stop, getTimestamp } = useBatRunner()
 
 async function run() {
   let currentTime = getTimestamp();
-  // const stopTime = currentTime + (interval * 1000 * 60 * 60);
-  const stopTime = currentTime + 2000;
+  const stopTime = currentTime + (interval * 1000 * 60 * 60);
+  // const stopTime = currentTime + 10000;
+  console.log('stopTime', new Date(stopTime).toISOString().substring(11, 16));
+
   start()
   console.log('start run');
 
   while (currentTime < stopTime) {
     currentTime = getTimestamp();
-    console.log(currentTime);
+    console.log('currentTime', new Date(currentTime).toISOString().substring(11, 16));
     await wait()
   }
 
   stop()
   console.log('stop run');
   await wait(100)
-  // run()
+  run()
 }
 
 run()
