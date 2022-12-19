@@ -4,7 +4,7 @@ const { StringDecoder } = require('node:string_decoder');
 const decoder = new StringDecoder('utf16le');
 
 
-const interval = 0.1 // hours
+const interval = 6 // hours
 
 async function wait(time = 1000) {
   return new Promise(resolve => setTimeout(resolve, time))
@@ -22,7 +22,7 @@ function useBatRunner() {
     console.log('start', id);
 
     currentBat.stdout.on('data', (data) => {
-      // console.log('stdout', data.toString());
+      console.log('stdout', data.toString());
     });
 
     currentBat.stderr.on('data', (data) => {
@@ -48,26 +48,24 @@ function useBatRunner() {
   }
 
   return {
-    getTimestamp,
     start,
     stop
   }
 }
 
-const { start, stop, getTimestamp } = useBatRunner()
+const { start, stop } = useBatRunner()
 
 async function run() {
   let currentTime = Date.now();
   const startTime = currentTime
-  const intervalMs = interval * 1000 * 60 * 60;
-  // const stopTime = currentTime + 20000;
-  // console.log('stopTime', new Date(stopTime).toISOString().substring(11, 16));
+  // const intervalMs = interval * 1000 * 60 * 60;
+  const intervalMs = 10000;
 
   start()
   console.log('start run');
 
   while (currentTime - startTime < intervalMs) {
-    currentTime = getTimestamp();
+    currentTime = Date.now();
     console.log('currentTime', new Date(currentTime).toISOString().substring(11, 16));
     await wait();
   }
