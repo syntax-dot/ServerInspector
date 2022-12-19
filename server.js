@@ -4,7 +4,9 @@ const { StringDecoder } = require('node:string_decoder');
 const decoder = new StringDecoder('utf16le');
 
 
-const interval = 6 // hours
+const interval = 6; // hours
+// const intervalMs = interval * 1000 * 60 * 60;
+const intervalMs = 10000; // ms
 
 async function wait(time = 1000) {
   return new Promise(resolve => setTimeout(resolve, time))
@@ -12,10 +14,13 @@ async function wait(time = 1000) {
 
 function useBatRunner() {
   let currentBat;
+  let startTime;
   const killSignal = 'SIGKILL'
   const id = (Math.random() * 10).toFixed(0);
 
   function start() {
+    startTime = Date.now()
+
     currentBat = spawn('cmd.exe', ['/c', 'server.ping.bat']);
     console.log('start', id);
 
@@ -30,6 +35,13 @@ function useBatRunner() {
     currentBat.stdin.on('data', (data) => {
       console.log('stdin', data.toString());
     });
+  }
+
+  function getStartTime() {
+    if (startTime)
+      return startTime
+    
+    return
   }
 
   function stop() {
@@ -54,20 +66,15 @@ function useBatRunner() {
 const { start, stop } = useBatRunner()
 
 async function run() {
-  let currentTime = Date.now();
-  const startTime = currentTime;
-  // const intervalMs = interval * 1000 * 60 * 60;
-  const intervalMs = 10000;
-
   while (true) {
-    handleTick(startTime, intervalMs);
+    handleTick();
     await wait();
   }
 
 }
 
-async function handleTick(startTime, intervalMs) {
-  if (Date.now() - startTime < intervalMs) {
+async function handleTick() {
+  if (Date.now() - getStartTime() < intervalMs) {
     return
   }
 
