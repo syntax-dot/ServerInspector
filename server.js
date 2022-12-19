@@ -64,7 +64,7 @@ function useBatRunner() {
   }
 }
 
-const { start, stop } = useBatRunner()
+const { start, stop, getStartTime } = useBatRunner()
 
 async function run() {
   while (true) {
