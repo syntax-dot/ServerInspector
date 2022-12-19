@@ -10,24 +10,6 @@ async function wait(time = 1000) {
   return new Promise(resolve => setTimeout(resolve, time))
 }
 
-async function run() {
-  let currentTime = getTimestamp();
-  // const stopTime = currentTime + (interval * 1000 * 60 * 60);
-  const stopTime = currentTime + 2000;
-  start()
-  console.log('start run');
-
-  while (currentTime < stopTime) {
-    currentTime = getTimestamp();
-    console.log(currentTime);
-    await wait()
-  }
-
-  stop()
-  console.log('stop run');
-}
-
-
 function useBatRunner() {
   let currentBat;
   const id = (Math.random() * 10).toFixed(0)
@@ -71,5 +53,24 @@ function useBatRunner() {
 }
 
 const { start, stop, getTimestamp } = useBatRunner()
+
+async function run() {
+  let currentTime = getTimestamp();
+  // const stopTime = currentTime + (interval * 1000 * 60 * 60);
+  const stopTime = currentTime + 2000;
+  start()
+  console.log('start run');
+
+  while (currentTime < stopTime) {
+    currentTime = getTimestamp();
+    console.log(currentTime);
+    await wait()
+  }
+
+  stop()
+  console.log('stop run');
+  await wait(100)
+  // run()
+}
 
 run()
