@@ -38,10 +38,7 @@ function useBatRunner() {
   }
 
   function getStartTime() {
-    if (startTime)
-      return startTime
-    
-    return
+    return startTime
   }
 
   function stop() {
