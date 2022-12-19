@@ -17,10 +17,6 @@ function useBatRunner() {
 
   const killSignal = 'SIGKILL'
 
-  function getTimestamp() {
-    return Date.now()
-  }
-
   function start() {
     currentBat = spawn('cmd.exe', ['/c', 'server.ping.bat']);
     console.log('start', id);
@@ -61,16 +57,16 @@ function useBatRunner() {
 const { start, stop, getTimestamp } = useBatRunner()
 
 async function run() {
-  let currentTime = getTimestamp();
+  let currentTime = Date.now();
   const startTime = currentTime
-  // const stopTime = currentTime + (interval * 1000 * 60 * 60);
+  const intervalMs = interval * 1000 * 60 * 60;
   // const stopTime = currentTime + 20000;
   // console.log('stopTime', new Date(stopTime).toISOString().substring(11, 16));
 
   start()
   console.log('start run');
 
-  while (startTime < currentTime + (interval * 1000 * 60 * 60)) {
+  while (currentTime - startTime < intervalMs) {
     currentTime = getTimestamp();
     console.log('currentTime', new Date(currentTime).toISOString().substring(11, 16));
     await wait();
