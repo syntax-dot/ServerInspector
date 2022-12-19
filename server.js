@@ -20,7 +20,7 @@ function useBatRunner() {
 
   function start() {
     currentBat = spawn('cmd.exe', ['/c', 'server.ping.bat']);
-    //TODO try catch
+    // TODO try catch
     startTime = Date.now()
     console.log('start', id);
 
