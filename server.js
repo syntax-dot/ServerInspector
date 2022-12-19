@@ -12,10 +12,8 @@ async function wait(time = 1000) {
 
 function useBatRunner() {
   let currentBat;
-  const id = (Math.random() * 10).toFixed(0);
-  console.log('id', id);
-
   const killSignal = 'SIGKILL'
+  const id = (Math.random() * 10).toFixed(0);
 
   function start() {
     currentBat = spawn('cmd.exe', ['/c', 'server.ping.bat']);
@@ -57,24 +55,27 @@ const { start, stop } = useBatRunner()
 
 async function run() {
   let currentTime = Date.now();
-  const startTime = currentTime
+  const startTime = currentTime;
   // const intervalMs = interval * 1000 * 60 * 60;
   const intervalMs = 10000;
 
-  start()
-  console.log('start run');
-
-  while (currentTime - startTime < intervalMs) {
-    currentTime = Date.now();
-    console.log('currentTime', new Date(currentTime).toISOString().substring(11, 16));
+  while (true) {
+    handleTick(startTime, intervalMs);
     await wait();
   }
 
-  stop()
-  console.log('stop run');
-  await wait(1000);
+}
 
-  run();
+async function handleTick(startTime, intervalMs) {
+  if (Date.now() - startTime < intervalMs) {
+    return
+  }
+
+  stop()
+
+  await wait(1000)
+
+  start()
 }
 
 run();
