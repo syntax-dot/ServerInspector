@@ -67,6 +67,8 @@ function useBatRunner() {
 const { start, stop, getStartTime } = useBatRunner()
 
 async function run() {
+  start()
+
   while (true) {
     handleTick();
     await wait();
