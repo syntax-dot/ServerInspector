@@ -19,22 +19,26 @@ function useBatRunner() {
   const id = (Math.random() * 10).toFixed(0);
 
   function start() {
-    currentBat = spawn('cmd.exe', ['/c', 'start.bat'], {cwd: './minecraft_server.1.12.2'});
-    // TODO try catch
-    startTime = Date.now()
-    console.log('start', id);
+    try {
+      currentBat = spawn('cmd.exe', ['/c', 'start.bat'], {cwd: './minecraft_server.1.12.2'});
+      // TODO try catch
+      startTime = Date.now()
+      console.log('start', id);
 
-    currentBat.stdout.on('data', (data) => {
-      console.log('stdout', data.toString());
-    });
+      currentBat.stdout.on('data', (data) => {
+        console.log('stdout', data.toString());
+      });
 
-    currentBat.stderr.on('data', (data) => {
-      console.log('stderr', data.toString());
-    });
+      currentBat.stderr.on('data', (data) => {
+        console.log('stderr', data.toString());
+      });
 
-    currentBat.stdin.on('data', (data) => {
-      console.log('stdin', data.toString());
-    });
+      currentBat.stdin.on('data', (data) => {
+        console.log('stdin', data.toString());
+      });
+    } catch(err) {
+    console.log("exception: "+err)
+    }
   }
 
   function getStartTime() {
