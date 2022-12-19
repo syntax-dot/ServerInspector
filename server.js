@@ -4,64 +4,72 @@ const { StringDecoder } = require('node:string_decoder');
 const decoder = new StringDecoder('utf16le');
 
 
-const interval = 5 // minutes
-
-function convertMinuteToMs(minutes = 1) {
-  return minutes * 60000
-}
+const interval = 5 // hours
 
 async function wait(time = 1000) {
   return new Promise(resolve => setTimeout(resolve, time))
 }
 
 async function run() {
-  const stopTime = getStartTime() + (6 * 1000 * 60 * 60);
-  let currentTime;
-  let isRunning = true;
+  let currentTime = getTimestamp();
+  // const stopTime = currentTime + (interval * 1000 * 60 * 60);
+  const stopTime = currentTime + 2000;
+  start()
+  console.log('start run');
 
-  while (isRunning) {
-    currentTime = Date.now();
-    await wait();
-
-    if (currentTime < stopTime) {
-      useBatRunner().start()
-    }
-
-    else {
-      useBatRunner().stop()
-      isRunning = false
-      await wait(100)
-      isRunning = true
-    }
+  while (currentTime < stopTime) {
+    currentTime = getTimestamp();
+    console.log(currentTime);
+    await wait()
   }
+
+  stop()
+  console.log('stop run');
 }
+
 
 function useBatRunner() {
   let currentBat;
+  const id = (Math.random() * 10).toFixed(0)
+  console.log('id', id);
 
-  function getStartTime() {
+  function getTimestamp() {
     return Date.now()
   }
 
   function start() {
     currentBat = spawn('cmd.exe', ['/c', 'server.ping.bat']);
+    console.log('start', id);
 
     currentBat.stdout.on('data', (data) => {
-    console.log(data.toString());
+      console.log('stdout', data.toString());
+    });
+
+    currentBat.stderr.on('data', (data) => {
+      console.log('stderr', data.toString());
+    });
+
+    currentBat.stdin.on('data', (data) => {
+      console.log('stdin', data.toString());
     });
   }
 
   function stop() {
-    currentBat?.kill()
+    currentBat.stdin.pause();
+    currentBat.stdout.pause();
+    currentBat.stderr.pause();
+    currentBat.kill();
+
+    console.log('stop', id);
   }
 
   return {
-    getStartTime,
+    getTimestamp,
     start,
     stop
   }
 }
 
-const { start, stop, getStartTime } = useBatRunner()
+const { start, stop, getTimestamp } = useBatRunner()
 
 run()
