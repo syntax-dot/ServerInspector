@@ -19,7 +19,7 @@ function useBatRunner() {
   const id = (Math.random() * 10).toFixed(0);
 
   function start() {
-    currentBat = spawn('cmd.exe', ['/c', '/minecraft_server.1.12.2/start.bat']);
+    currentBat = spawn('cmd.exe', ['/c', 'start.bat'], {cwd: './minecraft_server.1.12.2'});
     // TODO try catch
     startTime = Date.now()
     console.log('start', id);
